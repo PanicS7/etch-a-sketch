@@ -40,6 +40,7 @@ function createGrid(size) {
     div.addEventListener("click", () => {
       // Color Mode
       if([...colorMode.classList].includes("selected") || [...eraser.classList].includes("selected")) {
+        selectedButton(colorMode);
         div.style.backgroundColor = color;
       }
       // Rainbow Mode
@@ -47,6 +48,13 @@ function createGrid(size) {
         console.log("rainbowMode");
       }
     });
+
+    // Erase on right-click
+    div.addEventListener("contextmenu", () => {
+      event.preventDefault();
+      div.style.backgroundColor = "#fff";
+      selectedButton(eraser);
+    })
     
     grid.append(div);
   }
