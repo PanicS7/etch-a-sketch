@@ -5,8 +5,20 @@
 Bonus: Add random rgb hover effect
 */
 
-// Grid Container - paint screen
+// Elements
 const grid = document.getElementById("grid");
+const buttons = document.getElementsByClassName("button");
+const rainbowMode = document.getElementById("rainbowMode");
+const colorPicker = document.getElementById("color");
+const colorMode = document.getElementById("colorMode");
+const eraser = document.getElementById("eraser");
+const clear = document.getElementById("clear");
+const gridSize = document.getElementById("gridSize");
+const gridSizeInput = document.getElementById("gridSizeInput");
+
+let color = colorPicker.value;
+
+// Grid Container - paint screen
 function createGrid(size) {
   createDiv();
   function createDiv() {
@@ -24,6 +36,18 @@ function createGrid(size) {
     div.style.width = divSize + "px";
     div.style.height = divSize + "px";
 
+    // Draw
+    div.addEventListener("click", () => {
+      // Color Mode
+      if([...colorMode.classList].includes("selected") || [...eraser.classList].includes("selected")) {
+        div.style.backgroundColor = color;
+      }
+      // Rainbow Mode
+      else {
+        console.log("rainbowMode");
+      }
+    });
+    
     grid.append(div);
   }
 
@@ -35,7 +59,6 @@ function createGrid(size) {
 createGrid(5);
 
 // Handle selected style
-const buttons = document.getElementsByClassName("button");
 function selectedButton(elem) {
   [...buttons].map(button => {
     button.classList.remove("selected");
@@ -46,21 +69,18 @@ function selectedButton(elem) {
 
 /* EVENT LISTENERS */ 
 // Color Picker
-const colorPicker = document.getElementById("color");
 colorPicker.addEventListener("change", () => {
-  console.log(colorPicker.value);
+  selectedButton(colorMode);
+  color = colorPicker.value;
 });
 
 // Color Mode
-const colorMode = document.getElementById("colorMode");
 colorMode.addEventListener("click", () => {
-  console.log("color selected: " + colorPicker.value);
-
   selectedButton(colorMode);
+  color = colorPicker.value;
 });
 
 // Rainbow Mode
-const rainbowMode = document.getElementById("rainbowMode");
 rainbowMode.addEventListener("click", () => {
   console.log("rainbow mode");
 
@@ -68,28 +88,21 @@ rainbowMode.addEventListener("click", () => {
 });
 
 // Eraser 
-const eraser = document.getElementById("eraser");
 eraser.addEventListener("click", () => {
-  console.log("erase");
-
+  color = "#fff";
   selectedButton(eraser);
 });
 
 // Clear grid
-const clear = document.getElementById("clear");
 clear.addEventListener("click", () => {
-  console.log("clear grid");
-
-  selectedButton(clear);
   clearGrid();
+  createGrid(gridSizeInput.value);
 });
 function clearGrid() {
   grid.innerHTML = "";
 }
 
 // Grid size changer
-const gridSize = document.getElementById("gridSize");
-const gridSizeInput = document.getElementById("gridSizeInput");
 gridSizeInput.addEventListener("change", () => {
   gridSize.innerText = `${gridSizeInput.value} x ${gridSizeInput.value}`;
 
