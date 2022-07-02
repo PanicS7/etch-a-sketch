@@ -17,6 +17,7 @@ const gridSize = document.getElementById("gridSize");
 const gridSizeInput = document.getElementById("gridSizeInput");
 
 let color = colorPicker.value;
+let mode = colorMode;
 
 // Grid Container - paint screen
 function createGrid(size) {
@@ -39,13 +40,28 @@ function createGrid(size) {
     // Draw
     div.addEventListener("click", () => {
       // Color Mode
-      if([...colorMode.classList].includes("selected") || [...eraser.classList].includes("selected")) {
-        selectedButton(colorMode);
+      if (mode === colorMode) {
+        //selectedButton(colorMode);
         div.style.backgroundColor = color;
       }
       // Rainbow Mode
-      else {
-        console.log("rainbowMode");
+      if (mode === rainbowMode) {
+        // Create random hex color
+        let randomColor = "#";
+        let hex = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F"];
+        for (let i = 0; i < 6; i++) {
+          randomColor += randomHEX();
+        }      
+        function randomHEX() {
+          return hex[Math.floor(Math.random() * hex.length)];
+        }
+
+        //selectedButton(rainbowMode);
+        div.style.backgroundColor = randomColor;
+      }
+      if (mode === eraser) {
+        selectedButton(eraser);
+        div.style.backgroundColor = "#fff";
       }
     });
 
@@ -53,7 +69,6 @@ function createGrid(size) {
     div.addEventListener("contextmenu", () => {
       event.preventDefault();
       div.style.backgroundColor = "#fff";
-      selectedButton(eraser);
     })
     
     grid.append(div);
@@ -79,26 +94,28 @@ function selectedButton(elem) {
 // Color Picker
 colorPicker.addEventListener("change", () => {
   selectedButton(colorMode);
+  mode = colorMode;
   color = colorPicker.value;
 });
 
 // Color Mode
 colorMode.addEventListener("click", () => {
   selectedButton(colorMode);
+  mode = colorMode;
   color = colorPicker.value;
 });
 
 // Rainbow Mode
 rainbowMode.addEventListener("click", () => {
-  console.log("rainbow mode");
-
   selectedButton(rainbowMode);
+  mode = rainbowMode;
 });
 
 // Eraser 
 eraser.addEventListener("click", () => {
   color = "#fff";
   selectedButton(eraser);
+  mode = eraser;
 });
 
 // Clear grid
